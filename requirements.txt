@@ -1,6 +1,6 @@
 numpy
 matplotlib
 pandas
-sqlite
+sqlite3
 sklearn
 surprise
