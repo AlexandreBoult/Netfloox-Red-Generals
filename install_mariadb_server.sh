@@ -1,6 +1,9 @@
 #!/bin/bash
 su -c "
-cd /var/lib/mysql
+mkdir db
+cd $PWD/db
 rm -r *
-mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+mariadb-install-db --user=$USER --basedir=/usr --datadir=$PWD/db/data
+chown -cR $USER $PWD
+chmod -R 777 $PWD
 "

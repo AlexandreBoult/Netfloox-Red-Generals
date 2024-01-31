@@ -34,10 +34,17 @@ MacOS (with homebrew https://brew.sh/) :
 ```
 brew install mariadb
 ```
+### mariadb server creation and initilization :
+In the project directory execute following scripts in this order :
+```
+./install_mariadb_server.sh
+./start_server.sh
+./initialize_database.sh
+```
 ### Creation of the environment for linux/macOS :
 Open a terminal and navigate into the repositoriy directory with the cd command and launch the script with :
 ```
-sh create_env_linux.sh
+./create_env_linux.sh
 ```
 To activate the env use :
 ```
