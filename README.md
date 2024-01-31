@@ -20,7 +20,7 @@ MacOS (with homebrew https://brew.sh/) :
 ```
 brew install python@3.11
 ```
-### mariadb installation :
+### Mariadb installation :
 Ubuntu/Mint/debian :
 ```
 sudo apt update
@@ -34,7 +34,7 @@ MacOS (with homebrew https://brew.sh/) :
 ```
 brew install mariadb
 ```
-### mariadb server creation and initilization :
+### Mariadb server creation and initilization :
 In the project directory execute following scripts in this order :
 ```
 ./install_mariadb_server.sh
