@@ -41,6 +41,7 @@ In the project directory execute following scripts in this order :
 ./start_server.sh
 ./initialize_database.sh
 ```
+To stop the mariadb server either connect to it and type ```SHUTDOWN;``` or use ```./shutdown_server.sh```.
 ### Creation of the environment for linux/macOS :
 Open a terminal and navigate into the repositoriy directory with the cd command and launch the script with :
 ```
