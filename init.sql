@@ -1,2 +1,3 @@
 CREATE DATABASE netfloox;
-CREATE USER 'user@localhost' IDENTIFIED by 'pass';
+CREATE USER 'admin@localhost' IDENTIFIED by 'pass';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' IDENTIFIED BY 'pass';

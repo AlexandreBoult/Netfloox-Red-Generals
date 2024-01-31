@@ -5,3 +5,4 @@ scikit-learn
 SQLAlchemy
 sqlalchemy-utils
 pymysql
+pycurl
