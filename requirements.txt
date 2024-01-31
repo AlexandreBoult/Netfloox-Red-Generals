@@ -1,6 +1,5 @@
 numpy
 matplotlib
 pandas
-sqlite3
-sklearn
-surprise
+scikit-learn
+SQLAlchemy
