@@ -6,3 +6,4 @@ SQLAlchemy
 sqlalchemy-utils
 pymysql
 pycurl
+psycopg2

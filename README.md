@@ -28,7 +28,7 @@ sudo apt install mariadb-server
 ```
 Arch/Manjaro/Endeavouros :
 ```
-sudo pacman -Sy mariadb
+sudo pacman -Syu mariadb
 ```
 MacOS (with homebrew https://brew.sh/) :
 ```
