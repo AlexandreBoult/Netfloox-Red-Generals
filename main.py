@@ -13,10 +13,11 @@ db = create_engine(
     connect_args={'sslmode':'require','options': '-csearch_path={}'.format(env["dbschema"])},
     echo=True,
 ).connect()
-
-join_query="""
-    WITH title_basics_l AS (SELECT * from title_basics LIMIT 20)
-    SELECT *
+n_rows=100
+cluster="none"
+join_query=f"""
+    WITH title_basics_l AS (SELECT * from title_basics LIMIT {n_rows})
+    SELECT DISTINCT ON ("tconst") *
     FROM title_basics_l
         LEFT JOIN title_akas
             ON "tconst" = title_akas."titleId"
@@ -25,7 +26,8 @@ join_query="""
         LEFT JOIN title_ratings
             USING("tconst")
         LEFT JOIN title_principals
-            USING("tconst");
+            USING("tconst")
+    --WHERE "cluster" == {cluster};
 """
 
 categorical_transformer = OneHotEncoder()
