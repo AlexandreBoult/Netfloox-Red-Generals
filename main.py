@@ -13,23 +13,7 @@ db = create_engine(
     connect_args={'sslmode':'require','options': '-csearch_path={}'.format(env["dbschema"])},
     echo=False,
 ).connect()
-n_rows=1000
-cluster="none"
-offset=0
-join_query=f"""
-    WITH title_basics_l AS (SELECT * from title_basics LIMIT {n_rows})
-    SELECT DISTINCT ON ("tconst") *
-    FROM title_basics_l
-        LEFT JOIN title_akas
-            ON "tconst" = title_akas."titleId"
-        LEFT JOIN title_crew
-            USING("tconst")
-        LEFT JOIN title_ratings
-            USING("tconst")
-        LEFT JOIN title_principals
-            USING("tconst")
-    --WHERE "cluster" == {cluster};
-"""
+
 
 def title_query(n_rows,offset):
     cluster_feed_query=f"""
@@ -43,7 +27,8 @@ def title_query(n_rows,offset):
             LEFT JOIN title_ratings
                 USING("tconst")
             LEFT JOIN title_principals
-                USING("tconst");
+                USING("tconst")
+        --WHERE "cluster" == {cluster};
     """
     return cluster_feed_query
 
@@ -61,8 +46,10 @@ SELECT COUNT(DISTINCT "tconst") FROM title_basics;
 length=pd.read_sql(get_length,db)["count"][0]
 print(length)
 
+n_rows=1000
+
 df=pd.DataFrame()
-for n in range(length//1000):
-    df=pd.concat([df,pd.read_sql(title_query(1000,n*1000),db)])
-    print(f"{n/(length//1000)*100} % done")
+for n in range(length//n_rows):
+    df=pd.concat([df,pd.read_sql(title_query(n_rows,n*n_rows),db)])
+    print(f"{n/(length//n_rows)*100} % done")
 print(df.head())
