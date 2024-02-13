@@ -7,3 +7,5 @@ sqlalchemy-utils
 pymysql
 pycurl
 psycopg2
+imdb
+flask

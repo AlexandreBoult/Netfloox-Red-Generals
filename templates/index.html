@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Netfloox</title>
+  <link rel="stylesheet" href={{ url_for('static', filename='style.css') }}>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">   
+  </script>   
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">   
+  </script>   
+  
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />   
+  <style>
+  :root {
+    --main-bg-color: rgb{{vault[0][0]}};
+    --main-secondary-color: rgb{{vault[0][1]}};
+    --accent-color: rgb{{vault[0][2]}};
+    --bright-accent-color : rgb{{vault[0][3]}};
+  }
+  </style>
+</head>
+<body>
+<div class="container">
+<h1>Netfloox</h1>
+<label>test :</label>
+<div class="grid-container" style="grid-template-columns: 300px 180px 180px;">
+    <textarea rows = "3" name = "par" style="width: 300px;" placeholder="test" form="mainform">lol</textarea>
+    <button name="test1" class="button" value="1" form="mainform">test</button>
+    <input type="text" id="tags">
+
+    <script> 
+      $( function() { 
+        var availableTags = [ 
+            {% for x in vault[1] %} 
+                "{{x}}", 
+            {% endfor %} 
+        ]; 
+        $( "#tags" ).autocomplete({ 
+          source: availableTags 
+        }); 
+      } ); 
+      </script>
+
+</div>
+<form id="mainform" method="post">
+  <p></p>
+</form>
+</div>
+<textarea name = "vault" form="mainform" style="display: none;">{{vault}}</textarea>
+</body>
+</html>
