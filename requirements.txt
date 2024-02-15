@@ -9,3 +9,4 @@ pycurl
 psycopg2
 imdb
 flask
+Flask-Scss
