@@ -210,10 +210,10 @@ def load_model(time):
     model,preproc=pickle.loads(pickle.loads(m)),pickle.loads(pickle.loads(p))
     return preproc,model
 
-"""
+
 print(get_title_basics_length())
 
-random_blob=fetch_random_movie_info(250)
+random_blob=fetch_random_movie_info(10000)
 
 preproc,model=train_cluster(random_blob)
 
@@ -225,4 +225,4 @@ print(model1.cluster_centers_)
 
 conn.commit()
 cur.close()
-"""
+
