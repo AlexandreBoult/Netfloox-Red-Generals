@@ -179,12 +179,12 @@ def train_cluster(random_blob):
 def save_model(preproc,model):
     smodel=pickle.dumps(model, protocol=pickle.HIGHEST_PROTOCOL)
     spreproc=pickle.dumps(preproc, protocol=pickle.HIGHEST_PROTOCOL)
-    print(smodel)
+    #print(smodel)
     now = datetime.datetime.now()
     time=now.time()
     save_model_query = f"""CREATE TABLE IF NOT EXISTS model_table (time TEXT, model BYTEA, preproc BYTEA);"""
     statement=f"""INSERT INTO model_table("time", "model", "preproc") VALUES ({"'"+str(time)+"'"}, {str(base64.b64encode(smodel))[1:]}, {str(base64.b64encode(spreproc))[1:]});"""
-    print(statement)
+    #print(statement)
     cur.execute(save_model_query)
     cur.execute(statement)
     print(str(time))
