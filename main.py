@@ -219,9 +219,9 @@ preproc,model=train_cluster(random_blob)
 
 time=save_model(pickle.dumps(preproc),pickle.dumps(model))
 
-preproc1,model1=load_model(time)
+#preproc1,model1=load_model(time)
 
-print(model1.cluster_centers_)
+print(model.cluster_centers_)
 
 conn.commit()
 cur.close()
