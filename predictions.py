@@ -11,6 +11,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sqlalchemy import create_engine
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.base import BaseEstimator, TransformerMixin
+from scipy import sparse 
 
 # Database URL
 db_url = "postgresql://citus:floox2024!@c-groupe4.tlvz7y727exthe.postgres.cosmos.azure.com:5432/netfloox"
@@ -28,37 +30,18 @@ dfPop = pd.read_sql(sql_query_pop, engine)
 
 # Close the database connection
 engine.dispose()
+print(f"Taille de pop avec NULL {dfPop.size}")
 dfPop = dfPop.dropna()
+print(f"Taille de pop finale {dfPop.size}")
+print(f"Taille de rec avec NULL {dfRec.size}")
 dfRec = dfRec.dropna()
+print(f"Taille de pop finale {dfRec.size}")
 
-class CommaSeparatedEncoder:
-    def __init__(self):
-        self.label_encoders = {}
-        self.one_hot_encoder = OneHotEncoder()
-        
-    def fit(self, X, y=None):
-        for col in X.columns:
-            labels = set([val.strip() for sublist in X[col].str.split(',') for val in sublist])
-            self.label_encoders[col] = LabelEncoder().fit(list(labels))
-        return self
-    
-    def transform(self, X):
-        encoded_features = []
-        for col in X.columns:
-            encoded_col = self.label_encoders[col].transform(X[col].apply(lambda x: [val.strip() for val in x.split(',')]))
-            encoded_features.append(encoded_col)
-        encoded_features = np.column_stack(encoded_features)
-        return self.one_hot_encoder.fit_transform(encoded_features)
 
 ctpop = ColumnTransformer([
     ('num', StandardScaler(), ['startYear', 'runtimeMinutes']),
-    ('genres', CommaSeparatedEncoder(), ['genres','actors']) #LE VECTORIZER NE FUNCTIONNE QUE AVEC UNE COLONNE
-
-])
-
-ctrec = ColumnTransformer([
-    ('num', StandardScaler(), ['startYear', 'averageRating', 'numVotes']),
-    ('genres', CommaSeparatedEncoder(), ['genres','actors','directors']),
+    ('genres', CountVectorizer(), 'genres'),
+    ('actors',CountVectorizer(), 'actors')  #LE VECTORIZER NE FUNCTIONNE QUE AVEC UNE COLONNE
 
 ])
 
@@ -67,12 +50,7 @@ pop = Pipeline([
     ('model', RandomForestRegressor())
 ])
 
-recom = Pipeline([
-    ('prep', ctrec),
-    ('similarity', FunctionTransformer(lambda X: cosine_similarity(X)))
-])
-
-X = dfPop[['genres', 'startYear', 'runtimeMinutes']]
+X = dfPop[['genres', 'startYear', 'runtimeMinutes','actors']]
 y2 = dfPop ['numVotes']
 y1 = dfPop['averageRating']
 
@@ -104,29 +82,27 @@ mse_y2 = mean_squared_error(y2_test, y2_pred)
 print("Score test Rating:", mse_y1)
 print("Score test Votes:", mse_y2)
 
+features = ['genres','actors','directors']  
 
-Xrec = dfRec.drop(columns=['primaryTitle'])
+def combine_features(row):     
+    return row['genres'] +" "+row['actors']+" "+row["directors"]
 
-recom.fit(Xrec)
+for feature in features:    
+     dfRec[feature] = dfRec[feature].fillna('') 
+     dfRec["combined_features"] = dfRec.apply(combine_features,axis=1) 
+cv = CountVectorizer() 
+count_matrix = cv.fit_transform(dfRec["combined_features"]) 
+cosine_sim = cosine_similarity(count_matrix)  
+     
+def get_title_from_index(index):     
+    return dfRec[dfRec.index == index]["primaryTitle"].values[0] 
 
-def get_recommendations(target_title, cosine_sim_matrix, dfRec, top_n=5):
-    # Find the index of the target_tconst in dfRec
-    target_index = dfRec[dfRec['primaryTitle'] == target_title].index[0]
+def get_index_from_title(title):     
+    return dfRec[dfRec['primaryTitle'] == title].index[0]
 
-    # Sort the cosine similarity values for the target sample
-    similar_indices = np.argsort(-cosine_sim_matrix[target_index])
+#movie_user_likes = "Avatar" 
+#movie_index = get_index_from_title(movie_user_likes) 
+similar_movies =  list(enumerate(cosine_sim[5]))  
+sorted_similar_movies = sorted(similar_movies,key=lambda x:x[1],reverse=True)
 
-    # Select the top N similar samples (excluding itself)
-    top_n_similar_indices = similar_indices[1:top_n+1]  # Exclude itself
-
-    # Provide recommendations from the 'tconst' column
-    recommendations = dfRec.iloc[top_n_similar_indices]['primartTitle']
-    return recommendations.values
-
-# Specify the target tconst for which you want recommendations
-target_title = 'The Godfather'
-
-# Get recommendations for the target tconst
-recommendations = get_recommendations(target_title, cosine_sim_matrix, dfRec)
-print("Recommendations based on cosine similarity for tconst", target_tconst, ":")
-print(recommendations)
+print(pd.DataFrame(sorted_similar_movies).head(5))
