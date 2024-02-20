@@ -9,4 +9,5 @@ pycurl
 psycopg2
 IMDbPY
 flask
+sassutils
 Flask-Scss

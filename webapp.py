@@ -6,7 +6,7 @@ def reset_stgs():
     return colors,autocomplete
 
 reset_stgs()
-
+#test
 nb_instances=0
 
 app = Flask(__name__)
