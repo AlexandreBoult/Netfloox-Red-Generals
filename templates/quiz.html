@@ -38,14 +38,14 @@
 <div class="container" style="margin-top: 80px;">
 <label>test :</label>
 <div class="grid-container" style="grid-template-columns: 300px 180px 180px;">
-    <textarea rows = "3" name = "par" style="width: 300px;" placeholder="test" form="mainform"></textarea>
-    <button name="test1" class="button" value="1" form="mainform";>Quiz</button>
+    <textarea rows = "3" name = "par" style="width: 300px;" placeholder="test" form="mainform">lol</textarea>
+    <button name="test1" class="button" value="1" form="mainform">test</button>
     <input type="text" id="tags">
 
     <script> 
       $( function() { 
         var availableTags = [ 
-            {% for x in vault[1] %} 
+            {% for x in vault[1] %}
                 "{{x}}", 
             {% endfor %} 
         ]; 

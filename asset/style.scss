@@ -188,7 +188,7 @@ body {
 .txtanim {
   width:300px;
   text-align: center;
-  font-size: 5vmin;
+  font-size: 50px;
   font-weight: 700;
   animation: netflix_style 3.5s forwards;
   outline: none;
@@ -208,7 +208,7 @@ body {
 .txtstill {
   width:300px;
   text-align: center;
-  font-size: 5vmin;
+  font-size: 50px;
   font-weight: 700;
   animation: netflix_style 0s forwards;
   outline: none;
@@ -266,7 +266,6 @@ body {
   }
 
   100% {
-    transform: scale(1, 1);
     color: var(--bright-accent-color);
     text-shadow: none;
     background-clip: text;

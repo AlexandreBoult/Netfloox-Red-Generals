@@ -73,7 +73,8 @@ def get_title_basics_length():
     length=pd.read_sql(get_length,conn)["count"][0]
     return length
 
-
+#def fetch_popular_movies(length):
+    
 
 def fetch_movie_info(length,n_rows):
     df=pd.DataFrame()
@@ -211,6 +212,8 @@ def load_model(time):
     return preproc,model
 
 
+
+"""
 print(get_title_basics_length())
 
 random_blob=fetch_random_movie_info(10000)
@@ -225,4 +228,4 @@ print(model.cluster_centers_)
 
 conn.commit()
 cur.close()
-
+"""

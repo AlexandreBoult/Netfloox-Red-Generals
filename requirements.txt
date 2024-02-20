@@ -7,6 +7,6 @@ sqlalchemy-utils
 pymysql
 pycurl
 psycopg2
-imdb
+IMDbPY
 flask
 Flask-Scss
